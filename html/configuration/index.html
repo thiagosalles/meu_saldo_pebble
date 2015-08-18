@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Meu Saldo - Pebble Configuration</title>
+		<script>
+			function getUrlParams() {
+				var params = {};
+				location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
+					params[key] = value;
+				});
+				return params;
+			}	
+			function fillFields() {
+				var params = getUrlParams();
+				document.getElementById('card').value = decodeURIComponent(params.card || "");
+			}
+			function saveData() {
+				var configuration = {
+					card: document.getElementById('card').value,
+				}
+				if (configuration.card) {
+					close(configuration);
+				} else {
+					alert("Preencha com o número do seu cartão!");
+				}
+			}
+			function clearData() {
+				if (confirm("Deseja realmente limpar seu cartão?")) {
+					close({
+						clear: true
+					});
+				}
+			}
+			function close(configuration) {
+				location.href = 'pebblejs://close#' + encodeURIComponent(JSON.stringify(configuration));
+			}
+		</script>
+	</head>
+	<body onload="fillFields()">
+		<h1>Meu Saldo</h1>
+		<div>
+			<p>
+				Por enquanto é possível cadastrar apenas um cartão Alelo Refeição.<br />
+				Em breve será adicionada a opção para multiplos cartões e tipos diferentes
+			</p>
+		</div>
+		<div>
+			<label for="card">Alelo Refeição:</label>
+			<input type="tel" id="card" />
+		</div>
+		<div>
+			<button id="save" onclick="saveData()">Salvar</button>
+			<button id="clear" onclick="clearData()">Limpar</button>
+		</div>
+	</body>
+</html>

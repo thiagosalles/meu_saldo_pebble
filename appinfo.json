@@ -1,19 +1,20 @@
 {
-  "uuid": "4fcac2be-03ea-47d8-b0a5-fee14bfa7774",
-  "shortName": "Meu Saldo",
-  "longName": "Meu Saldo",
-  "companyName": "Thiago Salles",
-  "versionLabel": "1.0",
-  "sdkVersion": "3",
-  "targetPlatforms": ["aplite", "basalt"],
-  "capabilities": ["configurable"],
-  "watchapp": {
-    "watchface": false
-  },
-  "appKeys": {
-    "dummy": 0
-  },
-  "resources": {
-    "media": []
-  }
+	"uuid": "4fcac2be-03ea-47d8-b0a5-fee14bfa7774",
+	"shortName": "Meu Saldo",
+	"longName": "Meu Saldo",
+	"companyName": "Thiago Salles",
+	"versionLabel": "0.1",
+	"sdkVersion": "3",
+	"targetPlatforms": ["aplite", "basalt"],
+	"capabilities": ["configurable"],
+	"watchapp": {
+		"watchface": false
+	},
+	"appKeys": {
+		"STATUS": 0,
+		"BALANCE": 1
+	},
+	"resources": {
+		"media": []
+	}
 }
