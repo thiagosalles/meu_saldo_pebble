@@ -7,3 +7,4 @@ build
 
 # Ignore system files
 .DS_Store
+*.swp
