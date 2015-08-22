@@ -1,6 +1,6 @@
 #include <pebble.h>
 
-#include "windows/splash_screen.h"
+#include "windows/splash.h"
 
 enum AppMessageKeys {
 	STATUS = 0,
@@ -60,7 +60,7 @@ static void register_callbacks() {
 
 int main(void) {
 	register_callbacks();
-	open_splash_screen();
+	open_splash_window();
 	app_event_loop();
-	close_splash_screen();
+	close_splash_window();
 }
