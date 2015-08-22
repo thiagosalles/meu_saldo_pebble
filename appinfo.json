@@ -12,7 +12,8 @@
 	},
 	"appKeys": {
 		"STATUS": 0,
-		"BALANCE": 1
+		"BALANCE": 1,
+		"SUGGESTION": 2
 	},
 	"resources": {
 		"media": []

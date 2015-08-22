@@ -1,4 +1,6 @@
 #include <pebble.h>
 
-void open_splash_window();
-void close_splash_window();
+void create_splash_window();
+void destroy_splash_window();
+void show_splash_window();
+void hide_splash_window();

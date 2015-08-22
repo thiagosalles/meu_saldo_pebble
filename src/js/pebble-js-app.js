@@ -1,3 +1,11 @@
+var Status = {
+	"NO_CARD": 0,
+	"INVALID_CARD": 1,
+	"VALID_CARD": 2,
+	"REQUEST_ERROR": 3,
+	"INVALID_FORMAT": 4
+};
+
 var xhrRequest = function (url, type, data, onSuccess, onError) {
 	var xhr = new XMLHttpRequest();
 	xhr.onload = function () {
@@ -25,23 +33,33 @@ var getBalance = function() {
 	var card = getCard();
 	if (card) {
 		xhrRequest("http://m.alelo.com.br/ios/ajax-se.do?cartao="+card+"&tipo=0", "GET", null, function(responseText, statusCode) {
-			var responseJosn = JSON.parse(responseText);
-			console.log("-----O QUE DEU?-----");
-			console.log("responseText: " + responseText);
-			console.log("statusCode: " + statusCode);
-			sendStatus((statusCode == 200) ? 1 : 0);
+			var responseJson = JSON.parse(responseText);
+			if (typeof responseJson.Saldo == "object") {
+				if (typeof responseJson.Saldo.valDisp != "undefined" && typeof responseJson.Saldo.valGastoSugerido != "undefined") {
+					sendStatus(Status.VALID_CARD, responseJson.Saldo.valDisp.toString(), responseJson.Saldo.valGastoSugerido.toString());
+				} else {
+					sendStatus(Status.INVALID_FORMAT);
+				}
+			} else {
+				sendStatus(Status.INVALID_CARD);
+			}
 		}, function() {
-			sendStatus(3);
+			sendStatus(Status.REQUEST_ERROR);
 		});
 	} else {
-		sendStatus(4);
+		sendStatus(Status.NO_CARD);
 	}
 };
 
-var sendStatus = function(statusCode) {
+var sendStatus = function(statusCode, balance, suggestion) {
 	var dictionary = {
 		'STATUS': statusCode
 	};
+
+	if (typeof balance != "undefined" && typeof suggestion != "undefined") {
+		dictionary.BALANCE = balance.toString();
+		dictionary.SUGGESTION = suggestion.toString();
+	}
 
 	// Send to Pebble
 	Pebble.sendAppMessage(dictionary, function(e) {
@@ -56,7 +74,8 @@ Pebble.addEventListener("ready", function(e) {
 });
 
 Pebble.addEventListener('showConfiguration', function(e) {
-	Pebble.openURL('https://htmlpreview.github.io?https://raw.githubusercontent.com/thiagosalles/meu_saldo_pebble/master/html/configuration/index.html');
+	var card = getCard();
+	Pebble.openURL('https://htmlpreview.github.io?https://raw.githubusercontent.com/thiagosalles/meu_saldo_pebble/master/html/configuration/index.html?card='+card);
 });
 
 Pebble.addEventListener('webviewclosed', function(e) {
@@ -66,6 +85,5 @@ Pebble.addEventListener('webviewclosed', function(e) {
 	} else if (configuration.card) {
 		localStorage.setItem('card', configuration.card.trim());
 	}
-	console.log('Configuration window returned: ', JSON.stringify(configuration));
 	getBalance();
 });

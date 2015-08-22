@@ -17,7 +17,7 @@ static void splash_window_unload(Window *window) {
 	text_layer_destroy(s_splash_layer);
 }
 
-void open_splash_window() {
+void create_splash_window() {
 	s_splash_window = window_create();
 	window_set_background_color(s_splash_window, GColorBlack);
 	#ifdef PBL_SDK_2
@@ -27,9 +27,19 @@ void open_splash_window() {
 		.load = splash_window_load,
 		.unload = splash_window_unload
 	});
+}
+
+void destroy_splash_window() {
+	window_destroy(s_splash_window);
+}
+
+void show_splash_window() {
+	hide_splash_window();
 	window_stack_push(s_splash_window, true);
 }
 
-void close_splash_window() {
-	window_destroy(s_splash_window);
+void hide_splash_window() {
+	if (window_stack_contains_window(s_splash_window)) {
+		window_stack_remove(s_splash_window, false);
+	}
 }

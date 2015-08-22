@@ -1,10 +1,28 @@
 #include <pebble.h>
 
 #include "windows/splash.h"
+#include "windows/message.h"
 
 enum AppMessageKeys {
 	STATUS = 0,
-	BALANCE = 1
+	BALANCE = 1,
+	SUGGESTION = 2
+};
+
+enum Status {
+	NO_CARD = 0,
+	INVALID_CARD = 1,
+	VALID_CARD = 2,
+	REQUEST_ERROR = 3,
+	INVALID_FORMAT = 4
+};
+
+const char* StatusStrings[] = {
+	"No Card",
+	"Invalid Card",
+	"Valid Card",
+	"Request Error",
+	"Invalid Format"
 };
 
 static void inbox_received_callback(DictionaryIterator *iterator, void *context) {
@@ -12,6 +30,8 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
 
 	// Store incoming information
 	static int status;
+	char *balance = "";
+	char *suggestion = "";
 
 	// Read first item
 	Tuple *t = dict_read_first(iterator);
@@ -23,6 +43,12 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
 			case STATUS:
 				status = t->value->int32;
 				break;
+			case BALANCE:
+				balance = t->value->cstring;
+				break;
+			case SUGGESTION:
+				suggestion = t->value->cstring;
+				break;
 			default:
 				APP_LOG(APP_LOG_LEVEL_ERROR, "Key %d not recognized!", (int)t->key);
 				break;
@@ -32,7 +58,14 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
 		t = dict_read_next(iterator);
 	}
 
-	APP_LOG(APP_LOG_LEVEL_INFO, "Status: %d", status);
+	APP_LOG(APP_LOG_LEVEL_INFO, "Status: %s; Balance: %s; Suggestion: %s", StatusStrings[status], balance, suggestion);
+	if (status == VALID_CARD) {
+		show_message_window(strcat("Saldo: R$", balance));
+	} else {
+		show_message_window(StatusStrings[status]);
+	}
+
+	hide_splash_window();
 }
 
 static void inbox_dropped_callback(AppMessageResult reason, void *context) {
@@ -58,9 +91,20 @@ static void register_callbacks() {
 	app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
 }
 
-int main(void) {
+static void init() {
 	register_callbacks();
-	open_splash_window();
+	create_splash_window();
+	create_message_window();
+	show_splash_window();
+}
+
+static void deinit() {
+	destroy_splash_window();
+	destroy_message_window();
+}
+
+int main(void) {
+	init();
 	app_event_loop();
-	close_splash_window();
+	deinit();
 }
