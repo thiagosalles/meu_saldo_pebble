@@ -2,6 +2,7 @@
 
 #include "windows/splash.h"
 #include "windows/message.h"
+#include "windows/card_info.h"
 
 enum AppMessageKeys {
 	STATUS = 0,
@@ -60,8 +61,10 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
 
 	APP_LOG(APP_LOG_LEVEL_INFO, "Status: %s; Balance: %s; Suggestion: %s", StatusStrings[status], balance, suggestion);
 	if (status == VALID_CARD) {
-		show_message_window(strcat("Saldo: R$", balance));
+		hide_message_window();
+		show_card_info_window(balance, suggestion);
 	} else {
+		hide_card_info_window();
 		show_message_window(StatusStrings[status]);
 	}
 
@@ -95,12 +98,14 @@ static void init() {
 	register_callbacks();
 	create_splash_window();
 	create_message_window();
+	create_card_info_window();
 	show_splash_window();
 }
 
 static void deinit() {
 	destroy_splash_window();
 	destroy_message_window();
+	destroy_card_info_window();
 }
 
 int main(void) {
