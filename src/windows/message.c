@@ -1,21 +1,34 @@
 #include "message.h"
 
 static Window *s_message_window;
-static TextLayer *s_message_layer;
-static const char *s_message_text;
+static TextLayer *s_message_title_layer;
+static TextLayer *s_message_description_layer;
+static const char *s_message_title;
+static const char *s_message_description;
 
 static void message_window_load(Window *window) {
-	s_message_layer = text_layer_create(GRect(0, 65, 144, 40)); // GRect(x, y, width, high). Full Resolution is 144x168
-	text_layer_set_background_color(s_message_layer, GColorBlack);
-	text_layer_set_text_color(s_message_layer, GColorWhite);
-	text_layer_set_font(s_message_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
-	text_layer_set_text_alignment(s_message_layer, GTextAlignmentCenter);
-	text_layer_set_text(s_message_layer, s_message_text);
-	layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_message_layer));
+	// Title
+	s_message_title_layer = text_layer_create(GRect(2, 10, 140, 30)); // GRect(x, y, width, high). Full Resolution is 144x168
+	text_layer_set_background_color(s_message_title_layer, GColorBlack);
+	text_layer_set_text_color(s_message_title_layer, GColorWhite);
+	text_layer_set_font(s_message_title_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
+	text_layer_set_text_alignment(s_message_title_layer, GTextAlignmentCenter);
+	text_layer_set_text(s_message_title_layer, s_message_title);
+	layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_message_title_layer));
+
+	// Description
+	s_message_description_layer = text_layer_create(GRect(1, 40, 142, 124)); // GRect(x, y, width, high). Full Resolution is 144x168
+	text_layer_set_background_color(s_message_description_layer, GColorBlack);
+	text_layer_set_text_color(s_message_description_layer, GColorWhite);
+	text_layer_set_font(s_message_description_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
+	text_layer_set_text_alignment(s_message_description_layer, GTextAlignmentCenter);
+	text_layer_set_text(s_message_description_layer, s_message_description);
+	layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_message_description_layer));
 }
 
 static void message_window_unload(Window *window) {
-	text_layer_destroy(s_message_layer);
+	text_layer_destroy(s_message_title_layer);
+	text_layer_destroy(s_message_description_layer);
 }
 
 void create_message_window() {
@@ -34,8 +47,9 @@ void destroy_message_window() {
 	window_destroy(s_message_window);
 }
 
-void show_message_window(const char *message) {
-	s_message_text = message;
+void show_message_window(const char *title, const char *description) {
+	s_message_title = title;
+	s_message_description = description;
 	hide_message_window();
 	window_stack_push(s_message_window, true);
 }

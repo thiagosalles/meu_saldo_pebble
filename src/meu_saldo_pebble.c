@@ -18,12 +18,20 @@ enum Status {
 	INVALID_FORMAT = 4
 };
 
-const char* StatusStrings[] = {
-	"No Card",
-	"Invalid Card",
-	"Valid Card",
-	"Request Error",
-	"Invalid Format"
+const char* StatusTitle[] = {
+	"Sem Cartao",
+	"Cartao Invalido",
+	"Cartao Valido",
+	"Erro na Consulta",
+	"Formato Invalido"
+};
+
+const char* StatusDescription[] = {
+	"Voce nao possui um cartao cadastrado.\nAcesse as configuracoes do Meu Saldo atraves do aplicativo Pebble em seu smartphone.",
+	"O numero do cartao informado e invalido.\nPor favor, verifique o mesmo e tente novamente.",
+	"O cartao informado e valido.\nSe estiver visualizando esta mensagem, entre em contato.",
+	"Nao foi possivel efetuar a consulta do saldo do seu cartao.\nTente novamente.",
+	"Nao foi possivel efetuar a consulta do saldo do seu cartao.\nEntre em contato."
 };
 
 static void inbox_received_callback(DictionaryIterator *iterator, void *context) {
@@ -59,13 +67,13 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
 		t = dict_read_next(iterator);
 	}
 
-	APP_LOG(APP_LOG_LEVEL_INFO, "Status: %s; Balance: %s; Suggestion: %s", StatusStrings[status], balance, suggestion);
+	APP_LOG(APP_LOG_LEVEL_INFO, "Status: %s; Balance: %s; Suggestion: %s", StatusTitle[status], balance, suggestion);
 	if (status == VALID_CARD) {
 		hide_message_window();
 		show_card_info_window(balance, suggestion);
 	} else {
 		hide_card_info_window();
-		show_message_window(StatusStrings[status]);
+		show_message_window(StatusTitle[status], StatusDescription[status]);
 	}
 
 	hide_splash_window();
