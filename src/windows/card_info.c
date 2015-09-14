@@ -39,7 +39,7 @@ static void card_info_window_load(Window *window) {
 	text_layer_set_text_alignment(s_card_info_suggestion_text_layer, GTextAlignmentCenter);
 	l_suggestion = malloc(strlen(prefix) + strlen(s_card_info_suggestion) + 1);
 	strcpy(l_suggestion, prefix);
-	strcat(l_suggestion, s_card_info_balance);
+	strcat(l_suggestion, s_card_info_suggestion);
 	text_layer_set_text(s_card_info_suggestion_text_layer, l_suggestion);
 	layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_card_info_suggestion_text_layer));
 }
