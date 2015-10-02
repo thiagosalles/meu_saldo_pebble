@@ -31,7 +31,7 @@ static void card_info_window_load(Window *window) {
 	s_card_info_suggestion_title_layer = text_layer_create(GRect(0, 80, 144, 35)); // GRect(x, y, width, high). Full Resolution is 144x168
 	text_layer_set_font(s_card_info_suggestion_title_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD));
 	text_layer_set_text_alignment(s_card_info_suggestion_title_layer, GTextAlignmentCenter);
-	text_layer_set_text(s_card_info_suggestion_title_layer, "Sugestao");
+	text_layer_set_text(s_card_info_suggestion_title_layer, "Sugestão");
 	layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_card_info_suggestion_title_layer));
 
 	s_card_info_suggestion_text_layer = text_layer_create(GRect(0, 115, 144, 40)); // GRect(x, y, width, high). Full Resolution is 144x168

@@ -19,19 +19,19 @@ enum Status {
 };
 
 const char* StatusTitle[] = {
-	"Sem Cartao",
-	"Cartao Invalido",
-	"Cartao Valido",
+	"Sem Cartão",
+	"Cartão Inválido",
+	"Cartão Válido",
 	"Erro na Consulta",
-	"Formato Invalido"
+	"Formato Inválido"
 };
 
 const char* StatusDescription[] = {
-	"Voce nao possui um cartao cadastrado.\nAcesse as configuracoes do Meu Saldo atraves do aplicativo Pebble em seu smartphone.",
-	"O numero do cartao informado e invalido.\nPor favor, verifique o mesmo e tente novamente.",
-	"O cartao informado e valido.\nSe estiver visualizando esta mensagem, entre em contato.",
-	"Nao foi possivel efetuar a consulta do saldo do seu cartao.\nTente novamente.",
-	"Nao foi possivel efetuar a consulta do saldo do seu cartao.\nEntre em contato."
+	"Você não possui um cartão cadastrado.\nAcesse as configurações do Meu Saldo através do aplicativo Pebble em seu smartphone.",
+	"O número do cartão informado é inválido.\nPor favor, verifique o mesmo e tente novamente.",
+	"O cartão informado é válido.\nSe estiver visualizando esta mensagem, entre em contato.",
+	"Não foi possível efetuar a consulta do saldo do seu cartão.\nTente novamente.",
+	"Não foi possível efetuar a consulta do saldo do seu cartão.\nEntre em contato."
 };
 
 static void inbox_received_callback(DictionaryIterator *iterator, void *context) {
